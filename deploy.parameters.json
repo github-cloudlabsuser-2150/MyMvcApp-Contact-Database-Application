@@ -2,90 +2,43 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-  "appName": {
-    "type": "string",
-    "defaultValue": "myUniqueAppName",
-    "metadata": {
-      "description": "The name of the web app."
+    "baseAppName": {
+      "type": "string",
+      "defaultValue": "myUniqueAppName",
+      "metadata": {
+        "description": "The name of the web app."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "West US",
+      "metadata": {
+        "description": "The location where the resources will be deployed."
+      }
+    },
+    "hostingPlanId": {
+      "type": "string",
+      "defaultValue": "myHostingPlan",
+      "metadata": {
+        "description": "The name of the hosting plan."
+      }
+    },
+    "skuName": {
+      "type": "string",
+      "defaultValue": "F1",
+      "metadata": {
+        "description": "The SKU name of the hosting plan."
+      }
+    },
+    "skuTier": {
+      "type": "string",
+      "defaultValue": "Free",
+      "metadata": {
+        "description": "The SKU tier of the hosting plan."
+      }
     }
   },
-  "location": {
-    "type": "string",
-    "defaultValue": "East US",
-    "metadata": {
-      "description": "The location where the resources will be deployed."
-    }
-  },
-  "resourceGroup": {
-    "type": "string",
-    "defaultValue": "myResourceGroup",
-    "metadata": {
-      "description": "The name of the resource group."
-    }
-  },
-  "hostingPlanId": {
-    "type": "string",
-    "defaultValue": "myHostingPlan",
-    "metadata": {
-      "description": "The name of the hosting plan."
-    }
-  },
-  "skuName": {
-    "type": "string",
-    "defaultValue": "S1",
-    "metadata": {
-      "description": "The SKU name of the hosting plan."
-    }
-  },
-  "skuTier": {
-    "type": "string",
-    "defaultValue": "Standard",
-    "metadata": {
-      "description": "The SKU tier of the hosting plan."
-    }
-  },
-  "skuSize": {
-    "type": "string",
-    "defaultValue": "S1",
-    "metadata": {
-      "description": "The SKU size of the hosting plan."
-    }
-  },
-  "skuFamily": {
-    "type": "string",
-    "defaultValue": "S",
-    "metadata": {
-      "description": "The SKU family of the hosting plan."
-    }
-  },
-  "skuCapacity": {
-    "type": "int",
-    "defaultValue": 1,
-    "metadata": {
-      "description": "The capacity of the hosting plan."
-    }
-  },
-  "workerSize": {
-    "type": "int",
-    "defaultValue": 1,
-    "metadata": {
-      "description": "The worker size of the hosting plan."
-    }
-  },
-  "packageUrl": {
-    "type": "string",
-    "defaultValue": "",
-    "metadata": {
-      "description": "The URL of the deployment package."
-    }
-  },
-  "runtimeStack": {
-    "type": "string",
-    "defaultValue": "DOTNETCORE|3.1",
-    "metadata": {
-      "description": "The runtime stack for the web app."
-    }
+  "variables": {
+    "uniqueAppName": "[concat(parameters('baseAppName'), uniqueString(resourceGroup().id))]"
   }
-},
-  "outputs": {}
 }

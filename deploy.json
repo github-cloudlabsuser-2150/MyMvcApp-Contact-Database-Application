@@ -2,41 +2,34 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "resources": [
-  {
-    "type": "Microsoft.Web/sites",
-    "apiVersion": "2021-02-01",
-    "name": "[parameters('appName')]",
-    "location": "[parameters('location')]",
-    "properties": {
-      "serverFarmId": "[parameters('hostingPlanId')]",
-      "siteConfig": {
-        "appSettings": [
-          {
-            "name": "WEBSITE_RUN_FROM_PACKAGE",
-            "value": "[parameters('packageUrl')]"
-          }
-        ],
-        "linuxFxVersion": "[parameters('runtimeStack')]"
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2021-02-01",
+      "name": "[parameters('hostingPlanId')]",
+      "location": "[parameters('location')]",
+      "kind": "linux",
+      "properties": {
+		"reserved": true
+      },
+      "sku": {
+        "name": "[parameters('skuName')]",
+        "tier": "[parameters('skuTier')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2021-02-01",
+      "name": "[variables('uniqueAppName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanId'))]"
+      ],
+      "properties": {
+        "serverFarmId": "[parameters('hostingPlanId')]",
+        "siteConfig": {
+          "linuxFxVersion": "DOTNETCORE|8.0"
+        }
       }
     }
-  },
-  {
-    "type": "Microsoft.Web/serverfarms",
-    "apiVersion": "2021-02-01",
-    "name": "[parameters('hostingPlanId')]",
-    "location": "[parameters('location')]",
-    "sku": {
-      "name": "[parameters('skuName')]",
-      "tier": "[parameters('skuTier')]",
-      "size": "[parameters('skuSize')]",
-      "family": "[parameters('skuFamily')]",
-      "capacity": "[parameters('skuCapacity')]"
-    },
-    "properties": {
-      "name": "[parameters('hostingPlanId')]",
-      "workerSize": "[parameters('workerSize')]"
-    }
-  }
-],
-  "outputs": {}
+  ]
 }
