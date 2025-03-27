@@ -9,10 +9,13 @@ public class UserController : Controller
     public static System.Collections.Generic.List<User> userlist = new System.Collections.Generic.List<User>();
 
         // GET: User
-        public ActionResult Index()
+        public ActionResult Index(string search)
         {
-            // Implement the Index method here
-            return View(userlist);
+            // Implement the Index method with search functionality
+            var filteredUsers = string.IsNullOrEmpty(search) 
+            ? userlist 
+            : userlist.Where(u => u.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+            return View(filteredUsers);
         }
 
         // GET: User/Details/5
